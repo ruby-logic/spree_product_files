@@ -1,14 +1,8 @@
 require 'spec_helper'
 
 module Spree
-  describe Api::V1::ProductFilesController do
+  describe Api::V1::ProductFilesController, :type => :controller do
 
-    # Work around for failing .v1.rabl templates - TODO Can this be removed?
-    before do
-      ActionView::Template.register_template_handler('v1.rabl', ActionView::Template::Handlers::Rabl)
-    end
-
-    # From  spree/api/spec/support/controller_hacks.rb
     def api_get(action, params={}, session=nil, flash=nil)
       api_process(action, params, session, flash, "GET")
     end
@@ -23,14 +17,7 @@ module Spree
     end
     def api_process(action, params={}, session=nil, flash=nil, method="get")
       scoping = respond_to?(:resource_scoping) ? resource_scoping : {}
-      process(
-            action,
-            method: method,
-            params: params.merge(scoping),
-            session: session,
-            flash: flash,
-            format: :json
-      )
+      process(action, method, params.merge(scoping).reverse_merge!(:format => :json), session, flash)
     end
     def json_response
       case body = JSON.parse(response.body)
@@ -53,6 +40,7 @@ module Spree
     end
 
 
+
     render_views
 
     let!(:product) { create(:product) }
@@ -69,7 +57,6 @@ module Spree
 
       it "can learn how to create a new product_file" do
         api_get :new, product_id: product.id
-        expect(response.status).to eq(200)
         expect(json_response["attributes"]).to eq(attributes.map(&:to_s))
         expect(json_response["required_attributes"]).to be_empty
       end
@@ -134,11 +121,12 @@ module Spree
 
         it "can't update a product_file without attachment" do
           api_post :update,
+                   product_file: { attachment: nil },
                    id: product_product_file.id, product_id: product.id
           expect(response.status).to eq(422)
         end
 
-        it "can delete a product_file" do
+        it "can delete an product_file" do
           api_delete :destroy, :id => product_product_file.id, :product_id => product.id
           expect(response.status).to eq(204)
           expect { product_product_file.reload }.to raise_error(ActiveRecord::RecordNotFound)

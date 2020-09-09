@@ -1,10 +1,9 @@
 require 'spec_helper'
 
 describe Spree::ProductFile do
-
   before do
-    @product = FactoryBot.create :product
-    @product_file = FactoryBot.create :product_file, viewable: @product
+    @product = FactoryGirl.create :product
+    @product_file = FactoryGirl.create :product_file, viewable: @product
   end
   it "should be valid" do
     expect(@product_file).to be_valid
@@ -16,12 +15,12 @@ describe Spree::ProductFile do
 
   context "display_name" do
     it "should use the alt name if it is populated" do
-      @product_file.update_attributes(alt: 'myfile1')
+      @product_file.update_attributes(alt: 'myfile1', attachment_file_name: 'file1.png')
       expect(@product_file.display_name).to eq 'myfile1'
     end
     it "should use the attachment name if alt is blank" do
-      @product_file.update_attributes(alt: nil)
-      expect(@product_file.display_name).to eq 'thinking-cat.jpg'
+      @product_file.update_attributes(alt: nil, attachment_file_name: 'file1.png')
+      expect(@product_file.display_name).to eq 'file1.png'
     end
   end
 end

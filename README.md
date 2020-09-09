@@ -1,6 +1,7 @@
-# SpreeProductFiles
+Spree Product Files
+===================
 
-[![Build Status](https://travis-ci.org/stefansenk/spree_product_files.svg?branch=master) ](https://travis-ci.org/stefansenk/spree_product_files)
+[![Build Status](https://travis-ci.org/stefansenk/spree_product_files.svg?branch=master)](https://travis-ci.org/stefansenk/spree_product_files)
 
 Allows files to be uploaded to a product. E.g. PDF data files.
 
@@ -8,8 +9,11 @@ Allows files to be uploaded to a product. E.g. PDF data files.
 
 1. Add this extension to your Gemfile with this line:
   ```ruby
-  gem 'spree_product_files', github: 'stefansenk/spree_product_files'
+  gem 'spree_product_files', github: 'stefansenk/spree_product_files', branch: 'master'
   ```
+
+  The `branch` option is important: it must match the version of Spree you're using.
+  For example, use `3-1-stable` if you're using Spree `3-1-stable` or any `3.1.x` version.
 
 2. Install the gem using Bundler:
   ```ruby
@@ -48,4 +52,4 @@ If you'd like to contribute, please take a look at the
 [instructions](CONTRIBUTING.md) for installing dependencies and crafting a good
 pull request.
 
-Copyright (c) 2019 [name of extension creator], released under the New BSD License
+Copyright (c) 2016 Stefan Senk, released under the New BSD License
